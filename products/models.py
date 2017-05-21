@@ -14,12 +14,26 @@ class ProductCategory(models.Model):
 
 
 class Product(models.Model):
+    RELATED_PRODUCT_TYPES_PRICE = '0'
+    RELATED_PRODUCT_TYPES_MANUAL = '1'
+    RELATED_PRODUCT_TYPES_CHARS = '2'
+    RELATED_PRODUCT_TYPES_APRIORI = '3'
+
+    RELATED_PRODUCT_TYPES = (
+        (RELATED_PRODUCT_TYPES_PRICE, 'Price'),
+        (RELATED_PRODUCT_TYPES_MANUAL, 'Manual'),
+        (RELATED_PRODUCT_TYPES_CHARS, 'Characteristics'),
+        (RELATED_PRODUCT_TYPES_APRIORI, 'Apriori'),
+    )
+
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     discount = models.IntegerField(default=0)
     category = models.ForeignKey(ProductCategory, blank=True, null=True, default=None)
     short_description = models.TextField(blank=True, null=True, default=None)
     description = models.TextField(blank=True, null=True, default=None)
+    related_product_type = models.CharField(max_length=1, choices=RELATED_PRODUCT_TYPES, default="1")
+    related_products = models.ManyToManyField("self")
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
